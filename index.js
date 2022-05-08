@@ -1,6 +1,6 @@
-import argon2 from 'argon2-browser'
+const argon2 = require('argon2-browser')
 
-const hashRes = await argon2.hash({
+argon2.hash({
   pass: 'abcd',
   salt: 'jr84d12jdbcz',
   type: argon2.ArgonType.Argon2i,
@@ -8,6 +8,6 @@ const hashRes = await argon2.hash({
   mem: 4096,
   hashLen: 32,
   parallelism: 1,
+}).then(result => {
+  console.log(result.hash)
 })
-
-console.log(hashRes.hash)

@@ -11,4 +11,8 @@ async function main() {
     'hashLen': 32,
     'parallelism': 1,
   });
+
+  const sessionKey = hashRes.hash;
 }
+
+main();

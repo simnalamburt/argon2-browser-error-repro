@@ -1,7 +1,7 @@
-argon2-browser 1.18.0 error reproduction
+argon2-browser error reproduction
 ========
 
-Works in macOS, fails in Linux with Node.js v18:
+Works in Node.js < 18.1.0, fails with Node.js >= 18.1.0.
 ```console
 $ npm install
 # or `yarn install`, `pnpm install`, etc
@@ -49,3 +49,8 @@ Uint8Array(32) [
    57, 211, 138, 169
 ]
 ```
+
+This is due to change regarding `WebAssembly.instantiateStreaming`.
+
+###### References
+- https://github.com/nodejs/node/pull/42701

@@ -50,7 +50,35 @@ Uint8Array(32) [
 ]
 ```
 
-This is due to change regarding `WebAssembly.instantiateStreaming`.
+This is due to change regarding `WebAssembly.instantiateStreaming`, which was added in Node.js v18.1.0.
+
+```js
+function instantiateAsync() {
+  if (
+    !wasmBinary &&
+    typeof WebAssembly.instantiateStreaming === "function" &&
+    !isDataURI(wasmBinaryFile) &&
+    !isFileURI(wasmBinaryFile) &&
+    typeof fetch === "function" &&
+    !ENVIRONMENT_IS_NODE
+  ) {
+    // NOTE: Fails with Node.js's experimental fetch() API
+    return fetch(wasmBinaryFile, { credentials: "same-origin" }).then(
+      function (response) {
+        var result = WebAssembly.instantiateStreaming(response, info);
+        return result.then(receiveInstantiationResult, function (reason) {
+          err("wasm streaming compile failed: " + reason);
+          err("falling back to ArrayBuffer instantiation");
+          return instantiateArrayBuffer(receiveInstantiationResult);
+        });
+      }
+    );
+  } else {
+    // NOTE: Succeeds in here
+    return instantiateArrayBuffer(receiveInstantiationResult);
+  }
+}
+```
 
 ###### References
 - https://github.com/nodejs/node/pull/42701

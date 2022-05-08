@@ -59,8 +59,7 @@ function instantiateAsync() {
     typeof WebAssembly.instantiateStreaming === "function" &&
     !isDataURI(wasmBinaryFile) &&
     !isFileURI(wasmBinaryFile) &&
-    typeof fetch === "function" &&
-    !ENVIRONMENT_IS_NODE
+    typeof fetch === "function"
   ) {
     // NOTE: Fails with Node.js's experimental fetch() API
     return fetch(wasmBinaryFile, { credentials: "same-origin" }).then(

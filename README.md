@@ -1,7 +1,7 @@
 argon2-browser 1.18.0 error reproduction
 ========
 
-Works in macOS, fails in Linux:
+Works in macOS, fails in Linux with Node.js v18:
 ```console
 $ npm install
 # or `yarn install`, `pnpm install`, etc
@@ -27,4 +27,25 @@ RuntimeError: abort(TypeError: Failed to parse URL from /home/simnalamburt/works
     at process.processTicksAndRejections (node:internal/process/task_queues:96:32)
 
 Node.js v18.1.0
+```
+
+Works well if you disable experimental fetch:
+```console
+$ node --no-experimental-fetch .
+Uint8Array(32) [
+  227, 113, 183, 179,  96, 247, 226,
+   16, 152, 254, 125,  80, 199, 185,
+  221, 118, 209,  84, 255, 120, 202,
+  169,  35, 230, 180, 107, 194, 205,
+   57, 211, 138, 169
+]
+
+$ NODE_OPTIONS='--no-experimental-fetch' node .
+Uint8Array(32) [
+  227, 113, 183, 179,  96, 247, 226,
+   16, 152, 254, 125,  80, 199, 185,
+  221, 118, 209,  84, 255, 120, 202,
+  169,  35, 230, 180, 107, 194, 205,
+   57, 211, 138, 169
+]
 ```
